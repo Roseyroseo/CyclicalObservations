@@ -1,3 +1,9 @@
+:root {
+    --color-departures: steelblue;
+    --color-arrivals: darkorange;
+}
+
+
 html, body {
     margin: 0;
     padding: 5px;
@@ -25,10 +31,16 @@ html, body {
 
 #map svg circle {
     pointer-events: auto; /* Allow hover interactions */
-    fill: steelblue;
+    fill: var(--color);
     fill-opacity: 0.6;
     stroke: white;
     stroke-width: 1;
+
+    --color: color-mix(
+        in oklch,
+        var(--color-departures) calc(100% * var(--departure-ratio)),
+        var(--color-arrivals)
+    );
 }
 
 #tooltip {
@@ -98,3 +110,53 @@ label {
     font-size: 12px;
 }
 
+/* Legend Container */
+.legend {
+    display: flex;
+    justify-content: center; /* Center the legend horizontally */
+    align-items: center;
+    gap: 20px; /* Space between legend items */
+    margin-top: 10px;
+    padding: 8px 15px;
+    background: transparent;
+    backdrop-filter: blur(12px);
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+/* Word Legend*/
+.legend-title {
+    color: rgb(107, 107, 107);
+
+
+}
+
+/* Legend Items */
+.legend-item {
+    color: rgb(58, 58, 58);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Legend Swatches */
+.legend-swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid white;
+    background: var(--color);
+    
+    --color: color-mix(
+        in oklch,
+        var(--color-departures) calc(100% * var(--departure-ratio)),
+        var(--color-arrivals)
+    );
+}

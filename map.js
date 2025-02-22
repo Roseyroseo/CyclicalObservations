@@ -8,14 +8,13 @@ let timeFilter = -1;
 const timeSlider = document.getElementById('time-slider');
 const selectedTime = document.getElementById('selected-time');
 const anyTimeLabel = document.getElementById('any-time');
+const tooltip = d3.select("#tooltip");
 
 let trips = [];
 let filteredTrips = [];
 let filteredArrivals = new Map();
 let filteredDepartures = new Map();
 let filteredStations = [];
-
-
 
 // Initialize the map
 const map = new mapboxgl.Map({
@@ -27,6 +26,12 @@ const map = new mapboxgl.Map({
    maxZoom: 18
 });
 
+// traffic scale
+const stationFlow = d3.scaleQuantize()
+    .domain([0, 1])  // Range of departure ratio values
+    .range([0, 0.5, 1]); // Discrete color scale values
+
+
 // Shared style object for bike lanes
 const bikeLaneStyle = {
     'line-color': '#32D400',
@@ -34,7 +39,7 @@ const bikeLaneStyle = {
     'line-opacity': 0.4
 };
 
-const tooltip = d3.select("#tooltip");
+
 
 // Helper function to convert coordinates
 function getCoords(station) {
@@ -97,13 +102,17 @@ function updateMapVisualization() {
 
     // Enter + Merge new circles
     const mergedCircles = circles.enter()
-        .append('circle')
-        .merge(circles)
-        .attr('r', d => radiusScale(d.totalTraffic))
-        .attr('fill', 'steelblue')
-        .attr('stroke', 'white')
-        .attr('stroke-width', 1)
-        .attr('opacity', 0.6);
+    .append('circle')
+    .merge(circles)
+    .attr('r', d => radiusScale(d.totalTraffic))
+    .style("--departure-ratio", d => {
+        if (d.totalTraffic === 0) return 0.5; // Default to neutral if no traffic
+        return stationFlow(d.departures / d.totalTraffic);
+    })
+    .attr('stroke', 'white')
+    .attr('stroke-width', 1)
+    .attr('opacity', 0.6);
+
 
     //console.log("Circles updated:", mergedCircles.size());
 

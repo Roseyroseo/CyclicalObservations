@@ -90,8 +90,10 @@ function updateMapVisualization() {
     //console.log("Rendering Circles for Stations:", filteredStations.length);
 
     const radiusScale = d3.scaleSqrt()
-    .domain([0, d3.max(filteredStations, d => d.totalTraffic) || 1]) // Avoid NaN
-    .range(timeFilter === -1 ? [0, 25] : [5, Math.min(50, 150 * (d3.max(filteredStations, d => d.totalTraffic) / d3.max(stations, d => d.totalTraffic)))]);
+    .domain([0, d3.max(filteredStations, d => d.totalTraffic) || 1]) // Ensures correct scaling
+    .range(timeFilter === -1 
+        ? [3, 25]  // Ensures 0-trip stations are the smallest
+        : [3, Math.max(5, Math.min(50, 150 * (d3.max(filteredStations, d => d.totalTraffic) / (d3.max(stations, d => d.totalTraffic) || 1))))]);
 
 
     const circles = svg.selectAll('circle')

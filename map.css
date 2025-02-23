@@ -86,28 +86,30 @@ label {
     font-weight: bold;
 }
 
-#any-time {
-    color: grey;
-    font-style: italic;
-    display: inline-block;
-}
-
 .slider-container {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
+    position: relative;
 }
 
 .time-display {
-    display: flex;
-    flex-direction: column; /* Stack time and "any time" vertically */
-    align-items: center; /* Center align */
+    position: absolute;
+    right: 0; /* Aligns it to the right */
+    top: 25px; /* Moves it below the slider */
+    text-align: right; /* Ensures text is also right-aligned */
+    white-space: nowrap; /* Prevents wrapping */
 }
 
 #any-time {
     color: gray;
     font-style: italic;
     font-size: 12px;
+    position: absolute;
+    right: 0; /* Aligns it to the right */
+    top: 5px; /* Moves it below the slider */
+    text-align: right; /* Ensures text is also right-aligned */
+    white-space: nowrap; /* Prevents wrapping */
 }
 
 /* Legend Container */
@@ -133,8 +135,6 @@ label {
 /* Word Legend*/
 .legend-title {
     color: rgb(107, 107, 107);
-
-
 }
 
 /* Legend Items */
